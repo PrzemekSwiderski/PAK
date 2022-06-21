@@ -1,4 +1,4 @@
-package model;
+package fun.epak.pak.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -15,15 +16,17 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long userId;
-    private LocalDate createDate;
-    private String content;
-    private long postId;
-    private long commentId;
+    private String login;
+    private String password;
+    private String userName;
+    private String imageAddress;
+    private LocalDate registerDate;
+    private Boolean isActive;
+
 
 }

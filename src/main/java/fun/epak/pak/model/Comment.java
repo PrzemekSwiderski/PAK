@@ -1,4 +1,4 @@
-package model;
+package fun.epak.pak.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -16,15 +15,15 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private long id;
     private long userId;
     private LocalDate createDate;
     private String content;
-    private long answearId;
-    //repak jest "typo word"
-    private String imageAddress;
+    private long postId;
+    private long commentId;
+
 }

@@ -1,4 +1,4 @@
-package model;
+package fun.epak.pak.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,17 +16,15 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String login;
-    private String password;
-    private String userName;
+    private long userId;
+    private LocalDate createDate;
+    private String content;
+    private long answearId;
+    //repak jest "typo word"
     private String imageAddress;
-    private LocalDate registerDate;
-    private Boolean isActive;
-
-
 }
