@@ -17,14 +17,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long userId;
     private LocalDate createDate;
     private String content;
-    private long answearId;
-    //repak jest "typo word"
+    private long repakId;
     private String imageAddress;
 }

@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
-
     @Id
     @GeneratedValue
     private long id;
@@ -25,5 +24,4 @@ public class Comment {
     private String content;
     private long postId;
     private long commentId;
-
 }
