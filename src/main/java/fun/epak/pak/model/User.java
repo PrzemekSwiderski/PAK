@@ -16,13 +16,17 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long userId;
-    private LocalDate createDate;
-    private String content;
-    private long repakId;
+    private String login;
+    private String password;
+    private String userName;
     private String imageAddress;
+    private LocalDate registerDate;
+    private Boolean isActive;
+
+
 }
