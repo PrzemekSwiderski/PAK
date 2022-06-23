@@ -5,9 +5,8 @@
 
 <%@include file="dynamics/css.jspf" %>
 <body>
-<header class="main-banner">
-    <img src='<c:url value="/resources/images/pak-baner.png"/>' alt="page banner">
-</header>
+
+<%@include file="dynamics/banner.jspf" %>
 
 <div class="main-page">
     <main class="col-9">
@@ -40,16 +39,7 @@
             </p>
         </div>
     </main>
-    <nav class="col-3">
-        <div class="navigator">
-            <ul>
-                <li>Tablica</li>
-                <li>Eksploruj</li>
-                <li>Profil</li>
-                <li>Subskypcje</li>
-            </ul>
-        </div>
-    </nav>
+    <%@include file="dynamics/menu.jspf" %>
 </div>
 </body>
 </html>
