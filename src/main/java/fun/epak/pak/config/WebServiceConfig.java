@@ -1,31 +1,20 @@
 package fun.epak.pak.config;
 
 import fun.epak.pak.service.UserService;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.servlet.annotation.WebServlet;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class WebServiceConfig{
-
-/*
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserService();
-    }
-*/
 
     @Bean
     protected static PasswordEncoder passwordEncoder() {
@@ -55,8 +44,4 @@ public class WebServiceConfig{
         ).httpBasic(withDefaults());
         return http.build();
     }
-
-
-
-
 }
