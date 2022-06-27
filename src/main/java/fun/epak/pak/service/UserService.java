@@ -11,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,10 @@ public class UserService implements UserDetailsService {
         return new UserDetails(user);
     }
 
-    public void registerUser(UserRegistrationRequest userRegistrationRequest) {
+    public User registerUser(UserRegistrationRequest userRegistrationRequest, MultipartFile multipartFile) {
+        String fileExtension = Objects.requireNonNull(multipartFile.getContentType())
+                .toLowerCase()
+                .replaceFirst("image/", "");
         User user = User.builder()
                 .email(userRegistrationRequest.getEmail())
                 .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
@@ -38,7 +43,9 @@ public class UserService implements UserDetailsService {
                 .isActive(true)
                 .registerDate(LocalDate.now())
                 .build();
+        user.setImageName(user.getUsername() + "." + fileExtension);
         userRepository.save(user);
         userRoleRepository.save(new UserRole(user));
+        return user;
     }
 }

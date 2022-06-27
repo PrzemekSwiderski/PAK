@@ -27,7 +27,7 @@ public class User {
     private String email;
     private String password;
     private String username;
-    private String imageAddress;
+    private String imageName;
     private LocalDate registerDate;
     private Boolean isActive;
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
