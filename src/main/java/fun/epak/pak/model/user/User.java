@@ -3,6 +3,7 @@ package fun.epak.pak.model.user;
 import fun.epak.pak.model.Comment;
 import fun.epak.pak.model.Post;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
@@ -19,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "Users")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,18 +34,11 @@ public class User {
     private Boolean isActive;
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<UserRole> roles;
+    private Set<UserRole> roles = new HashSet<>();
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts;
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
-
-
-    public User() {
-        registerDate = LocalDate.now();
-        roles = new HashSet<>();
-        roles.add(new UserRole(this));
-    }
 }

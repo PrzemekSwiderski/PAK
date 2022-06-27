@@ -18,10 +18,10 @@ public class UserRole {
     private long id;
     @ManyToOne
     private User user;
-    private String role;
+    private String role = "USER";
 
     public UserRole(User user) {
         this.user = user;
-        role = "USER";
     }
 }
+
