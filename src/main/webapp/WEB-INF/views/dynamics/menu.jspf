@@ -1,0 +1,12 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<nav class="col-3">
+    <div class="navigator">
+        <ul>
+            <li>Tablica</li>
+            <li>Eksploruj</li>
+            <li>Profil</li>
+            <li>Subskypcje</li>
+        </ul>
+    </div>
+</nav>
