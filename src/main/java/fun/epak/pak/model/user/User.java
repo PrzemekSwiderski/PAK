@@ -2,10 +2,7 @@ package fun.epak.pak.model.user;
 
 import fun.epak.pak.model.Comment;
 import fun.epak.pak.model.Post;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -21,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 @Builder
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
