@@ -30,24 +30,6 @@ public class UserService implements UserDetailsService {
         return new UserDetails(user);
     }
 
-    public User loadUserById(Long id) throws UsernameNotFoundException {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException(ERROR_MESSAGE));
-    }
-
-    public User loadUserByEmail(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(ERROR_MESSAGE));
-    }
-
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public void registerUser(UserRegistrationRequest userRegistrationRequest) {
         User user = User.builder()
                 .email(userRegistrationRequest.getEmail())
@@ -56,9 +38,7 @@ public class UserService implements UserDetailsService {
                 .isActive(true)
                 .registerDate(LocalDate.now())
                 .build();
-        saveUser(user);
+        userRepository.save(user);
         userRoleRepository.save(new UserRole(user));
     }
-
-
 }
