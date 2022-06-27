@@ -33,10 +33,26 @@ public class WebServiceConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((auth) -> {
                     try {
-                        auth.antMatchers("/**").hasAuthority("USER")
+                        auth
+                                .antMatchers("/auth").permitAll()
+                                .antMatchers("/").hasAuthority("USER")
                                 .and()
                                 .csrf().disable()
-                                .headers().frameOptions().disable();
+                                .headers().frameOptions().disable()
+                                .and()
+                                .formLogin()
+                                .loginPage("/auth")
+                                .usernameParameter("email")
+                                .passwordParameter("password")
+                                .loginProcessingUrl("/auth")
+                                .failureForwardUrl("/auth?error")
+                                .defaultSuccessUrl("/")
+                                .and()
+                                .logout().deleteCookies("JSESSIONID")
+                                .logoutSuccessUrl("/")
+                                .and()
+                                .rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60)
+                                .key("AbcqwerasdgfrdefghiJk5yz");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
