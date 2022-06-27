@@ -1,0 +1,73 @@
+body {
+    background: black;
+}
+
+.main-banner{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 20px auto;
+    box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.1);
+}
+
+
+.main-page {
+    width: 1200px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 10px auto;
+
+}
+
+
+
+.post {
+    margin-bottom: 25px;
+    background: rgba(255, 2555, 255, 0.01);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.1);
+    color: aliceblue;
+}
+
+.navigator {
+    background: rgba(245, 229, 27, 0.9);
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.1);
+}
+
+.auth-page{
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 10px auto;
+    color: aliceblue;
+}
+
+.login-controller{
+    float: none;
+    margin: 0 auto;
+}
+
+.login-controller span{
+    padding: 10px;
+}
+
+.reg-auth-forms{
+    width: 400px;
+    margin: 10px auto;
+}
+
+#switch-register:hover{
+    color: yellow;
+    cursor: pointer;
+}
+
+#switch-auth:hover{
+    color: yellow;
+    cursor: pointer;
+}
