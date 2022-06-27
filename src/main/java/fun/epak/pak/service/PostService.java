@@ -3,11 +3,11 @@ package fun.epak.pak.service;
 import fun.epak.pak.model.Post;
 import fun.epak.pak.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
@@ -23,12 +23,12 @@ public class PostService {
 
     public Page<Post> fetchAllPosts(int pageNo, int size) {
         PageRequest pageRequest = PageRequest.of(pageNo, size);
-        Page<Post> postPage = postsRepository.findAll(pageRequest);
+        Page<Post> postPage = postRepository.findAll(pageRequest);
         return postPage;
     }
 
 }
 //zapisanie posta
 //wczytanie posta po Id
-//wczytanie 10 postow (paginacja)pageable
+
 //
