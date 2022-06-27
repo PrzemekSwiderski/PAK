@@ -32,19 +32,13 @@ public class User {
     private String imageAddress;
     private LocalDate registerDate;
     private Boolean isActive;
-    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<UserRole> roles = new HashSet<>();
-    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts;
-    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
-
-
-    public User() {
-        registerDate = LocalDate.now();
-        isActive = true;
-    }
 }

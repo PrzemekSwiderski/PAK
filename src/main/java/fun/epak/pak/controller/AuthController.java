@@ -1,7 +1,6 @@
 package fun.epak.pak.controller;
 
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
-import fun.epak.pak.service.UserRoleService;
 import fun.epak.pak.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class AuthController {
 
     private final UserService userService;
-    private final UserRoleService userRoleService;
 
     @GetMapping("/auth")
     public String getLogin() {

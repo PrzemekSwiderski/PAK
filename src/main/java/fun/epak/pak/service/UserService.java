@@ -5,6 +5,7 @@ import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
 import fun.epak.pak.model.user.UserRole;
 import fun.epak.pak.repository.UserRepository;
+import fun.epak.pak.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final  UserRoleService userRoleService;
+    private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final String ERROR_MESSAGE = "User not found";
@@ -43,21 +44,20 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    public void registerUser(UserRegistrationRequest userRegistrationRequest){
+    public void registerUser(UserRegistrationRequest userRegistrationRequest) {
         User user = User.builder()
                 .email(userRegistrationRequest.getEmail())
                 .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                 .username(userRegistrationRequest.getUsername())
-                .imageAddress(userRegistrationRequest.getImageAddress())
                 .isActive(true)
                 .registerDate(LocalDate.now())
                 .build();
         saveUser(user);
-        userRoleService.saveRole(new UserRole(user));
+        userRoleRepository.save(new UserRole(user));
     }
 
 
