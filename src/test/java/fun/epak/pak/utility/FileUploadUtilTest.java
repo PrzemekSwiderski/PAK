@@ -62,7 +62,7 @@ class FileUploadUtilTest {
 
     private static class CustomMockMultipartFile extends MockMultipartFile {
 
-        public CustomMockMultipartFile(String name, String originalFilename, String contentType, byte[] content) {
+        private CustomMockMultipartFile(String name, String originalFilename, String contentType, byte[] content) {
             super(name, originalFilename, contentType, content);
         }
 
