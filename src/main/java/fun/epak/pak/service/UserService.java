@@ -42,6 +42,11 @@ public class UserService implements UserDetailsService {
         String fileExtension = getFileExtension(multipartFile);
         User user = createUser(userRegistrationRequest, fileExtension);
         user = userRepository.save(user);
+        userRoleRepository.save(new UserRole(user));
+        saveFile(multipartFile, user);
+    }
+
+    private void saveFile(MultipartFile multipartFile, User user) {
         String uploadDir = "data/images/profiles/" + user.getId();
         try {
             FileUploadUtil.saveFile(uploadDir, user.getImageName(), multipartFile);
@@ -49,7 +54,6 @@ public class UserService implements UserDetailsService {
             logger.error(e.getLocalizedMessage());
             throw new SaveFileException("Error at file upload at: " + uploadDir + "with file: " + user.getImageName());
         }
-        userRoleRepository.save(new UserRole(user));
     }
 
     private User createUser(UserRegistrationRequest userRegistrationRequest, String fileExtension) {
@@ -65,7 +69,6 @@ public class UserService implements UserDetailsService {
 
     private String getFileExtension(MultipartFile multipartFile) {
         return Objects.requireNonNull(multipartFile.getContentType())
-
                 .replaceFirst("image/", "");
     }
 }

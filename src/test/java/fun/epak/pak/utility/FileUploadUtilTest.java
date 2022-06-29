@@ -14,35 +14,26 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileUploadUtilTest {
-    String uploadDirectory = "testData";
-    String fileName = "test.txt";
-    Path uploadPath = Paths.get(uploadDirectory + "/" + fileName);
-
+    private static final String UPLOAD_DIRECTORY = "testData";
+    private static final String FILE_NAME = "test.txt";
+    private static final Path UPLOAD_PATH = Paths.get(UPLOAD_DIRECTORY + "/" + FILE_NAME);
 
     @AfterEach
-    public void deleteFiles(){
-        try {
-            Files.deleteIfExists(uploadPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void deleteFiles() throws IOException {
+            Files.deleteIfExists(UPLOAD_PATH);
     }
 
     @Test
-    void shouldReadFille() {
+    void shouldReadFille() throws IOException {
         //when
-        try {
-            FileUploadUtil
-                    .saveFile(uploadDirectory,
-                            fileName,
-                            new MockMultipartFile("data",
-                                    "picture.txt",
-                                    "text/plain",
-                                    "test of File Reader".getBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        boolean result = Files.exists(uploadPath);
+        FileUploadUtil
+                .saveFile(UPLOAD_DIRECTORY,
+                        FILE_NAME,
+                        new MockMultipartFile("data",
+                                "picture.txt",
+                                "text/plain",
+                                "test of File Reader".getBytes()));
+        boolean result = Files.exists(UPLOAD_PATH);
         //then
         assertTrue(result);
     }
@@ -50,8 +41,8 @@ class FileUploadUtilTest {
     @Test
     void shouldThrowException() {
         assertThatThrownBy(() -> FileUploadUtil
-                .saveFile(uploadDirectory,
-                        fileName,
+                .saveFile(UPLOAD_DIRECTORY,
+                        FILE_NAME,
                         new CustomMockMultipartFile("data",
                                 "picture.txt",
                                 "text/plain",
@@ -60,7 +51,6 @@ class FileUploadUtilTest {
     }
 
     private static class CustomMockMultipartFile extends MockMultipartFile {
-
         private CustomMockMultipartFile(String name, String originalFilename, String contentType, byte[] content) {
             super(name, originalFilename, contentType, content);
         }

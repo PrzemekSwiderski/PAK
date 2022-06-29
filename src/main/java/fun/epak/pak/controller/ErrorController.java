@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ErrorController {
 
     @ExceptionHandler({SaveFileException.class, FileSizeLimitExceededException.class})
-    public String getFileEror(){
+    public String getErrorView(){
         return "/errors/file";
     }
 }
