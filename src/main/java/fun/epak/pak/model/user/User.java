@@ -40,12 +40,4 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
-    @Transient
-    public String getImagePath(){
-        if(imageName == null){
-            return null;
-        }
-        return "/data/profiles/" + id + "/" + imageName;
-    }
-
 }
