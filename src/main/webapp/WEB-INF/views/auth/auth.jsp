@@ -36,7 +36,7 @@
                 <button type="submit">Zaloguj</button>
             </div>
         </form>
-        <form method="post" action='<c:url value="/register"/>' class="registration" id="form-register" enctype=”multipart/form-data” hidden="hidden" >
+        <form method="post" action='<c:url value="/register"/>' class="registration" id="form-register"  enctype="multipart/form-data" hidden="hidden" >
             <div class="form-group mt-3">
                 <label for="log-mail">Email</label>
                 <input type="text" name="email" class="form-control" id="reg-mail" placeholder="adres email" required>
@@ -53,7 +53,7 @@
             </div>
             <div class="form-group mt-3">
                 <label for="log-password">Wgraj zdjęcie</label>
-                <input type="fille" class="form-control" name="image" id="reg-image-address"
+                <input type="file" class="form-control" name="image" id="reg-image-address"
                        accept="image/png, image/jpeg"
                        required>
             </div>

@@ -1,18 +1,25 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
 import fun.epak.pak.model.user.UserRole;
 import fun.epak.pak.repository.UserRepository;
 import fun.epak.pak.repository.UserRoleRepository;
+import fun.epak.pak.utility.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +29,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final String ERROR_MESSAGE = "User not found";
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,15 +38,37 @@ public class UserService implements UserDetailsService {
         return new UserDetails(user);
     }
 
-    public void registerUser(UserRegistrationRequest userRegistrationRequest) {
-        User user = User.builder()
+    public void registerUser(UserRegistrationRequest userRegistrationRequest, MultipartFile multipartFile) {
+        String fileExtension = getFileExtension(multipartFile);
+        User user = createUser(userRegistrationRequest, fileExtension);
+        user = userRepository.save(user);
+        userRoleRepository.save(new UserRole(user));
+        saveFile(multipartFile, user);
+    }
+
+    private void saveFile(MultipartFile multipartFile, User user) {
+        String uploadDir = "data/images/profiles/" + user.getId();
+        try {
+            FileUploadUtil.saveFile(uploadDir, user.getImageName(), multipartFile);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+            throw new SaveFileException("Error at file upload at: " + uploadDir + "with file: " + user.getImageName());
+        }
+    }
+
+    private User createUser(UserRegistrationRequest userRegistrationRequest, String fileExtension) {
+        return User.builder()
                 .email(userRegistrationRequest.getEmail())
                 .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                 .username(userRegistrationRequest.getUsername())
+                .imageName(userRegistrationRequest.getUsername().toLowerCase() + "." + fileExtension)
                 .isActive(true)
                 .registerDate(LocalDate.now())
                 .build();
-        userRepository.save(user);
-        userRoleRepository.save(new UserRole(user));
+    }
+
+    private String getFileExtension(MultipartFile multipartFile) {
+        return Objects.requireNonNull(multipartFile.getContentType())
+                .replaceFirst("image/", "");
     }
 }
