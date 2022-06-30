@@ -16,6 +16,7 @@
     <description>PAK</description>
     <properties>
         <java.version>11</java.version>
+        <org.junit.jupiter.version>5.8.2</org.junit.jupiter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -91,6 +92,26 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.6.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${org.junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${org.junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.23.1</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
