@@ -82,10 +82,10 @@ public class UserService implements UserDetailsService {
 
     public void saveChangedUser(ChangeUserDataRequest userData, MultipartFile multipartFile, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        if (userData.getUsername() != null) {
+        if (userData.getUsername() != null && !"".equals(userData.getUsername())) {
             user.setUsername(userData.getUsername());
         }
-        if (userData.getPassword() != null) {
+        if (userData.getPassword() != null && !"".equals(userData.getPassword())) {
             user.setPassword(passwordEncoder.encode(userData.getPassword()));
         }
         if(!multipartFile.isEmpty()){

@@ -12,12 +12,7 @@ public class IndexController {
     @GetMapping
     public String getIndex(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-/*        User user = null;
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            user =  userService.loadUserById(authentication.getName());
-        }*/
         model.addAttribute("test", authentication.getName());
-
         return "index";
     }
 }
