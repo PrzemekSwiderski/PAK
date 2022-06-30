@@ -1,6 +1,8 @@
 package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
+import fun.epak.pak.infrastructure.ChangeUserDataRequest;
+import fun.epak.pak.infrastructure.UserProfileData;
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
@@ -70,5 +72,26 @@ public class UserService implements UserDetailsService {
     private String getFileExtension(MultipartFile multipartFile) {
         return Objects.requireNonNull(multipartFile.getContentType())
                 .replaceFirst("image/", "");
+    }
+
+    public UserProfileData loadUserProfileData(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        String userImagePath = "/data/images/profiles/" + user.getId() + "/" + user.getImageName();
+        return UserProfileData.of(user, userImagePath);
+    }
+
+    public void saveChangedUser(ChangeUserDataRequest userData, MultipartFile multipartFile, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        if (userData.getUsername() != null) {
+            user.setUsername(userData.getUsername());
+        }
+        if (userData.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userData.getPassword()));
+        }
+        if(!multipartFile.isEmpty()){
+            user.setImageName(user.getUsername().toLowerCase() + "." +  getFileExtension(multipartFile));
+            saveFile(multipartFile, user);
+        }
+        userRepository.save(user);
     }
 }
