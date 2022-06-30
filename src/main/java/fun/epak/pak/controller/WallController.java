@@ -1,6 +1,6 @@
 package fun.epak.pak.controller;
 
-import fun.epak.pak.model.Post;
+import fun.epak.pak.infrastructure.PageData;
 import fun.epak.pak.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,13 +14,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WallController {
     private final PostService postService;
-
     @GetMapping("/wall/exploration")
     public String getExploration(Model model) {
-        List<Post> posts = postService.loadAllPost();
-        model.addAttribute("allPosts", posts);
+        List<PageData> posts = postService.loadAllPageData();
+        model.addAttribute("posts", posts);
         return "/wall/exploration";
     }
+
 }
 
 

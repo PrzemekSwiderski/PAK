@@ -10,9 +10,8 @@
 
 <div class="main-exploration">
     <main class="col-9">
-        <c:forEach items="${allPosts}" var="post">
+        <c:forEach items="${posts}" var="post">
             <div class="post">
-                <span class="post">${post.getUser().getUsername()}</span>
                 <span class="create-date">${post.getCreateDate()}</span>
                 <p class="post-content">${post.getContent()}</p>
             </div>
