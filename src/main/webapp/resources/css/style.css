@@ -2,7 +2,7 @@ body {
     background: black;
 }
 
-.main-banner{
+.main-banner {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
@@ -36,7 +36,7 @@ body {
     box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.1);
 }
 
-.auth-page{
+.auth-page {
     width: 1200px;
     display: flex;
     flex-direction: column;
@@ -45,21 +45,21 @@ body {
     color: aliceblue;
 }
 
-.login-controller{
+.login-controller {
     float: none;
     margin: 0 auto;
 }
 
-.login-controller span{
+.login-controller span {
     padding: 10px;
 }
 
-.reg-auth-forms{
+.reg-auth-forms {
     width: 400px;
     margin: 10px auto;
 }
 
-#switch-register:hover{
+#switch-register:hover {
     color: yellow;
     cursor: pointer;
 }
@@ -67,6 +67,48 @@ body {
 #switch-auth:hover {
     color: yellow;
     cursor: pointer;
+}
+
+.profile {
+    color: aliceblue;
+}
+
+.profile-iamge {
+    max-width: 100%;
+    height: auto;
+}
+
+.profile .is-readonly .btn-save{
+    display: none;
+}
+
+.profile .is-readonly .btn-edit{
+    color: red;
+}
+
+.profile .is-readonly input, .profile .is-readonly textarea {
+    cursor: text;
+    background-color: black;
+    border-color: transparent;
+    outline-color: transparent;
+    box-shadow: none;
+    color: aliceblue;
+    text-align: left;
+
+}
+
+.profile .is-editing .btn-edit{
+    display: none;
+}
+.profile .btn-save{
+    color: red;
+}
+.profile .new-image .is-readonly{
+    display: none;
+}
+
+.profile .new-image .is-editing{
+    display: none;
 }
 .main-exploration{
     width: 1200px;

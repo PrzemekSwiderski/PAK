@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<jsp:useBean id="now" class="java.util.Date"/>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@include file="dynamics/css.jspf" %>
@@ -9,9 +8,10 @@
 <%@include file="dynamics/banner.jspf" %>
 
 <div class="main-page">
+<%--    <img src='<c:url value="/data/images/profiles/1/przemek.jpg"/>' alt="testowe zdjecie">--%>
     <main class="col-9">
         <div class="post">
-            <span>Imię i nazwisko</span>
+            <span>${test}</span>
             <span>Data</span>
             <p>"Lorem ipsum dolor sit amet,
                 consectetur adipiscing elit, sed do eiusmod
