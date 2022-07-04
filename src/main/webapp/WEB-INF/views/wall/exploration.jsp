@@ -12,7 +12,10 @@
     <main class="col-9">
         <c:forEach items="${posts}" var="post">
             <div class="post">
-                <span class="create-date">${post.getCreateDate()}</span>
+                <img class="user-image" src='<c:url value="${post.getUserImageAddress()}"/>' alt="user image" >
+                <div class="user-name"><a  href = '<c:url value="/profile/${post.getUserId()}"/>'>
+                        ${post.getUsername()}</a></div>
+                <div class="create-date">${post.getCreateDate()}</div>
                 <p class="post-content">${post.getContent()}</p>
             </div>
         </c:forEach>

@@ -9,17 +9,19 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageData {
-    private long id;
+    private Long userId;
     private String username;
-    private String content;
     private String userImageAddress;
+    private long postId;
+    private String content;
     private LocalDate createDate;
 
     public static PageData of(Post post, String path) {
         return new PageData(post.getUser().getId(),
                 post.getUser().getUsername(),
-                post.getContent(),
                 path,
+                post.getId(),
+                post.getContent(),
                 post.getCreateDate());
     }
 

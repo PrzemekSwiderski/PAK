@@ -35,7 +35,3 @@ public class PostService {
 
 
 }
-//zapisanie posta
-//wczytanie posta po Id
-
-//
