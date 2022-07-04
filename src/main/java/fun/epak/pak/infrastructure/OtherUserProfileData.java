@@ -5,8 +5,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OtherUserProfileData {
@@ -15,6 +13,6 @@ public class OtherUserProfileData {
     private String imageNameAddress;
 
     public static OtherUserProfileData of(User user, String path) {
-        return new OtherUserProfileData(user.getId(),  user.getUsername(), path);
+        return new OtherUserProfileData(user.getId(), user.getUsername(), path);
     }
 }

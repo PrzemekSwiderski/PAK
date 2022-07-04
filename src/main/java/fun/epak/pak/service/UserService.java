@@ -89,14 +89,14 @@ public class UserService implements UserDetailsService {
         if (userData.getPassword() != null && !"".equals(userData.getPassword())) {
             user.setPassword(passwordEncoder.encode(userData.getPassword()));
         }
-        if(!multipartFile.isEmpty()){
-            user.setImageName(user.getUsername().toLowerCase() + "." +  getFileExtension(multipartFile));
+        if (!multipartFile.isEmpty()) {
+            user.setImageName(user.getUsername().toLowerCase() + "." + getFileExtension(multipartFile));
             saveFile(multipartFile, user);
         }
         userRepository.save(user);
     }
 
-    public OtherUserProfileData loadOtherUserProfileData(long id){
+    public OtherUserProfileData loadOtherUserProfileData(long id) {
         User user = userRepository.findById(id).orElseThrow();
         String userImagePath = "/data/images/profiles/" + user.getId() + "/" + user.getImageName();
         return OtherUserProfileData.of(user, userImagePath);
