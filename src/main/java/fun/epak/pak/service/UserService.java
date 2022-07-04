@@ -2,6 +2,7 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.infrastructure.ChangeUserDataRequest;
+import fun.epak.pak.infrastructure.OtherUserProfileData;
 import fun.epak.pak.infrastructure.UserProfileData;
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
 import fun.epak.pak.model.user.User;
@@ -93,5 +94,11 @@ public class UserService implements UserDetailsService {
             saveFile(multipartFile, user);
         }
         userRepository.save(user);
+    }
+
+    public OtherUserProfileData loadOtherUserProfileData(long id){
+        User user = userRepository.findById(id).orElseThrow();
+        String userImagePath = "/data/images/profiles/" + user.getId() + "/" + user.getImageName();
+        return OtherUserProfileData.of(user, userImagePath);
     }
 }
