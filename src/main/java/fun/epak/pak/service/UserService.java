@@ -2,6 +2,7 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.infrastructure.ChangeUserDataRequest;
+import fun.epak.pak.infrastructure.OtherUserProfileData;
 import fun.epak.pak.infrastructure.UserProfileData;
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
 import fun.epak.pak.model.user.User;
@@ -13,6 +14,7 @@ import fun.epak.pak.utility.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
+
+    @Value("${image.address}")
+    private String imageBaseAddress;
 
     private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
@@ -76,7 +81,7 @@ public class UserService implements UserDetailsService {
 
     public UserProfileData loadUserProfileData(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String userImagePath = "/data/images/profiles/" + user.getId() + "/" + user.getImageName();
+        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
         return UserProfileData.of(user, userImagePath);
     }
 
@@ -88,10 +93,16 @@ public class UserService implements UserDetailsService {
         if (userData.getPassword() != null && !"".equals(userData.getPassword())) {
             user.setPassword(passwordEncoder.encode(userData.getPassword()));
         }
-        if(!multipartFile.isEmpty()){
-            user.setImageName(user.getUsername().toLowerCase() + "." +  getFileExtension(multipartFile));
+        if (!multipartFile.isEmpty()) {
+            user.setImageName(user.getUsername().toLowerCase() + "." + getFileExtension(multipartFile));
             saveFile(multipartFile, user);
         }
         userRepository.save(user);
+    }
+
+    public OtherUserProfileData loadOtherUserProfileData(long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        return OtherUserProfileData.of(user, userImagePath);
     }
 }
