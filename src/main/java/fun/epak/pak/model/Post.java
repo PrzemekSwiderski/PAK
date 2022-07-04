@@ -22,6 +22,6 @@ public class Post {
     private User user;
     private LocalDate createDate;
     private String content;
-    private long repakId;
+    private Long repakId;
     private String imageAddress;
 }
