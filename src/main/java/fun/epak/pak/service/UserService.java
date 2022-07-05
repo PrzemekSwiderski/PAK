@@ -1,7 +1,6 @@
 package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
-import fun.epak.pak.exceptions.SubscribeYourselfException;
 import fun.epak.pak.infrastructure.ChangeUserDataRequest;
 import fun.epak.pak.infrastructure.OtherUserProfileData;
 import fun.epak.pak.infrastructure.UserProfileData;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Objects;
 
 @Service
@@ -73,7 +71,6 @@ public class UserService implements UserDetailsService {
                 .imageName(userRegistrationRequest.getUsername().toLowerCase() + "." + fileExtension)
                 .isActive(true)
                 .registerDate(LocalDate.now())
-                .subscriptions(new ArrayList<>())
                 .build();
     }
 
@@ -103,24 +100,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public OtherUserProfileData loadOtherUserProfileData(String email, long id) {
+    public OtherUserProfileData loadOtherUserProfileData(long id) {
         User user = userRepository.findById(id).orElseThrow();
-        User viewer = userRepository.findByEmail(email).orElseThrow();
         String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
-        return OtherUserProfileData.of(user, userImagePath, viewer);
-    }
-
-    public void changeUserSubscriptionList(String email, long id) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        User subscriptedUser = userRepository.findById(id).orElseThrow();
-        if (user.equals(subscriptedUser)) {
-            throw new SubscribeYourselfException("You cant subscribe to yourself");
-        }
-        if (user.getSubscriptions().contains(subscriptedUser)) {
-            user.getSubscriptions().remove(subscriptedUser);
-        } else {
-            user.getSubscriptions().add(subscriptedUser);
-        }
-        userRepository.save(user);
+        return OtherUserProfileData.of(user, userImagePath);
     }
 }
