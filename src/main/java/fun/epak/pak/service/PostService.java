@@ -1,11 +1,15 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
 import fun.epak.pak.model.Post;
+import fun.epak.pak.model.user.User;
 import fun.epak.pak.repository.PostRepository;
+import fun.epak.pak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,24 +18,29 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public void savePost(Post post) {
-        postRepository.save(post);
-    }
-
-    public Post loadPostById(Long id) {
-        return postRepository.findById(id).orElseThrow();
-    }
     public List<PageData> loadAllPageData() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> {
-            String userImagePath =
-                    "/data/images/profiles/"
-                            + post.getUser().getId()
-                            + "/" + post.getUser().getImageName();
-            return PageData.of(post, userImagePath);
-        }).collect(Collectors.toList());
+        return posts.stream()
+                .map(this::mapToPageData)
+                .sorted(Comparator.comparing(PageData::getPostId).reversed())
+                .collect(Collectors.toList());
     }
 
+    private PageData mapToPageData(Post post) {
+        String userImagePath =
+                "/data/images/profiles/"
+                        + post.getUser().getId()
+                        + "/" + post.getUser().getImageName();
+        return PageData.of(post, userImagePath);
+    }
 
+    public void saveNewPost(NewPostRequest post, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        Post newPost = new Post();
+        newPost.setUser(user);
+        newPost.setContent(post.getContent());
+        postRepository.save(newPost);
+    }
 }

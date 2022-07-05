@@ -10,6 +10,14 @@
 
 <div class="main-exploration">
     <main class="col-9">
+        <div class="post">
+            <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
+            <form action='<c:url value="/new-post"/>' method="post">
+                <textarea class="col-10" name="content" rows="3"
+                          placeholder="Powiedz, co ci chodzi po głowie ${user.getUsername()}"></textarea>
+                <button type="submit">Wyślij</button>
+            </form>
+        </div>
         <c:forEach items="${posts}" var="post">
             <div class="post">
                 <img class="user-image" src='<c:url value="${post.getUserImageAddress()}"/>' alt="user image" >

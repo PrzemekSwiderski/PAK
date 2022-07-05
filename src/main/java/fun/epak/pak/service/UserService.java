@@ -7,6 +7,7 @@ import fun.epak.pak.infrastructure.OtherUserProfileData;
 import fun.epak.pak.infrastructure.SubscribersData;
 import fun.epak.pak.infrastructure.UserProfileData;
 import fun.epak.pak.infrastructure.UserRegistrationRequest;
+import fun.epak.pak.infrastructure.UserWritingPostData;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
 import fun.epak.pak.model.user.UserRole;
@@ -149,6 +150,12 @@ public class UserService implements UserDetailsService {
     private SubscribersData mapToSubscribersData(User user) {
         String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
         return SubscribersData.of(user, userImagePath);
+    }
+
+    public UserWritingPostData loadUserWritingPostData(String email){
+        User user = userRepository.findByEmail(email).orElseThrow();
+        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        return UserWritingPostData.of(user, userImagePath);
     }
 
 
