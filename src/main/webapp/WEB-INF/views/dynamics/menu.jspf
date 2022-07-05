@@ -4,7 +4,7 @@
     <div class="navigator">
         <ul>
             <li><a href='<c:url value="/"/>'>Tablica</a></li>
-            <li>Eksploruj</li>
+            <li><a href='<c:url value="/wall/exploration"/>'>Eksploruj</a></li>
             <li><a href='<c:url value="/my-profile"/>'>Profil</a></li>
             <li>Subskypcje</li>
         </ul>
