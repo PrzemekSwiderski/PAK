@@ -140,16 +140,16 @@ public class UserService implements UserDetailsService {
     public List<SubscribersData> loadAllSubscriptions(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Set<User> subscriptions = user.getSubscriptions();
-        return getListOfSubscribersData(subscriptions);
-    }
-
-    private List<SubscribersData> getListOfSubscribersData(Set<User> subscriptions) {
         return subscriptions.stream()
-                .map(users -> {
-                    String userImagePath = imageBaseAddress + users.getId() + "/" + users.getImageName();
-                    return SubscribersData.of(users, userImagePath);
-                })
+                .map(this::mapToSubscribersData)
                 .sorted(Comparator.comparing(SubscribersData::getId))
                 .collect(Collectors.toList());
     }
+
+    private SubscribersData mapToSubscribersData(User user) {
+        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        return SubscribersData.of(user, userImagePath);
+    }
+
+
 }
