@@ -32,7 +32,7 @@ public class ProfileController {
         return "/profile/profile";
     }
 
-    @PostMapping("my-profile")
+    @PostMapping("/my-profile")
     public RedirectView postUpdateToMyPRofile(ChangeUserDataRequest userData,
                                               @RequestParam("image") MultipartFile multipartFile,
                                               Principal principal) {
@@ -40,10 +40,16 @@ public class ProfileController {
         return new RedirectView("/my-profile");
     }
 
-    @GetMapping("profile/{id}")
-    public String getOtherProfile(@PathVariable long id, Model model) {
-        OtherUserProfileData user = userService.loadOtherUserProfileData(id);
+    @GetMapping("/profile/{id}")
+    public String getOtherProfile(@PathVariable long id, Model model, Principal principal) {
+        OtherUserProfileData user = userService.loadOtherUserProfileData(principal.getName(), id);
         model.addAttribute("user", user);
         return "/profile/otherProfile";
+    }
+
+    @PostMapping("/subscriptions")
+    public RedirectView changeSubscriptionList(long id, Principal principal) {
+        userService.changeUserSubscriptionList(principal.getName(), id);
+        return new RedirectView("/profile/" + id);
     }
 }
