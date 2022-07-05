@@ -7,13 +7,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class OtherUserProfileData {
+public class SubscribersData {
     private long id;
     private String username;
     private String imageNameAddress;
-    private Boolean isSubscribed;
 
-    public static OtherUserProfileData of(User user, String path, Boolean isSubscribed) {
-        return new OtherUserProfileData(user.getId(), user.getUsername(), path, isSubscribed);
+    public static SubscribersData of(User user, String path) {
+        return new SubscribersData(user.getId(), user.getUsername(), path);
     }
 }

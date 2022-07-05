@@ -2,10 +2,7 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.exceptions.SubscribeYourselfException;
-import fun.epak.pak.infrastructure.ChangeUserDataRequest;
-import fun.epak.pak.infrastructure.OtherUserProfileData;
-import fun.epak.pak.infrastructure.UserProfileData;
-import fun.epak.pak.infrastructure.UserRegistrationRequest;
+import fun.epak.pak.infrastructure.*;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
 import fun.epak.pak.model.user.UserRole;
@@ -24,8 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +70,7 @@ public class UserService implements UserDetailsService {
                 .imageName(userRegistrationRequest.getUsername().toLowerCase() + "." + fileExtension)
                 .isActive(true)
                 .registerDate(LocalDate.now())
-                .subscriptions(new ArrayList<>())
+                .subscriptions(new HashSet<>())
                 .build();
     }
 
@@ -106,21 +103,40 @@ public class UserService implements UserDetailsService {
     public OtherUserProfileData loadOtherUserProfileData(String email, long id) {
         User user = userRepository.findById(id).orElseThrow();
         User viewer = userRepository.findByEmail(email).orElseThrow();
+        boolean contains = viewer.getSubscriptions().contains(user);
         String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
-        return OtherUserProfileData.of(user, userImagePath, viewer);
+        return OtherUserProfileData.of(user, userImagePath, contains);
     }
 
-    public void changeUserSubscriptionList(String email, long id) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        User subscriptedUser = userRepository.findById(id).orElseThrow();
-        if (user.equals(subscriptedUser)) {
+    public void subscribeUser(String subscribingEmail, long subscribedId) {
+        User user = userRepository.findByEmail(subscribingEmail).orElseThrow();
+        User subscribedUser = userRepository.findById(subscribedId).orElseThrow();
+        if (user.equals(subscribedUser)) {
             throw new SubscribeYourselfException("You cant subscribe to yourself");
         }
-        if (user.getSubscriptions().contains(subscriptedUser)) {
-            user.getSubscriptions().remove(subscriptedUser);
-        } else {
-            user.getSubscriptions().add(subscriptedUser);
-        }
+        user.getSubscriptions().add(subscribedUser);
         userRepository.save(user);
+    }
+
+    public void unsubscribeUser(String unsubscribingEmail, long unsubscribedId) {
+        User user = userRepository.findByEmail(unsubscribingEmail).orElseThrow();
+        User subscribedUser = userRepository.findById(unsubscribedId).orElseThrow();
+        if (user.equals(subscribedUser)) {
+            throw new SubscribeYourselfException("You cant subscribe to yourself");
+        }
+        user.getSubscriptions().remove(subscribedUser);
+        userRepository.save(user);
+    }
+
+    public List<SubscribersData> loadAllSubscriptions(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        Set<User> subscriptions = user.getSubscriptions();
+        return subscriptions.stream()
+                .map(users -> {
+                    String userImagePath = imageBaseAddress + users.getId() + "/" + users.getImageName();
+                    return SubscribersData.of(users, userImagePath);
+                })
+                .sorted(Comparator.comparing(SubscribersData::getId))
+                .collect(Collectors.toList());
     }
 }

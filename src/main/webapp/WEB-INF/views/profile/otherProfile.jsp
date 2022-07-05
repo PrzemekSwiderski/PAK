@@ -12,17 +12,10 @@
     <main class="col-9 profile row">
         <div class="col-6">
             <p>${user.getUsername()}</p>
-            <form method="post" action='<c:url value="/subscriptions"/>'>
-                <input type="number" name="id" value="${user.getId()}" class="visually-hidden"/>
+            <form method="post" action='<c:url value="${user.getIsSubscribed() ? '/unsubscribe' : '/subscribe'}"/>'>
+                <input type="number" name="subscribedUserId" value="${user.getId()}" class="visually-hidden"/>
                 <button type="submit">
-                    <c:choose>
-                        <c:when test='${!user.getIsSubscribed()}'>
-                            Obserwuj
-                        </c:when>
-                        <c:otherwise>
-                            Przestań obserwować
-                        </c:otherwise>
-                    </c:choose>
+                    ${user.getIsSubscribed() ? 'Prrzestań obserwować' : 'obserwuj'}
                 </button>
             </form>
         </div>
