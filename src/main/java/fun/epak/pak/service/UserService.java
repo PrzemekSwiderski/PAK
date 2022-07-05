@@ -2,7 +2,11 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.exceptions.SubscribeYourselfException;
-import fun.epak.pak.infrastructure.*;
+import fun.epak.pak.infrastructure.ChangeUserDataRequest;
+import fun.epak.pak.infrastructure.OtherUserProfileData;
+import fun.epak.pak.infrastructure.SubscribersData;
+import fun.epak.pak.infrastructure.UserProfileData;
+import fun.epak.pak.infrastructure.UserRegistrationRequest;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.model.user.UserDetails;
 import fun.epak.pak.model.user.UserRole;
@@ -21,7 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,20 +118,21 @@ public class UserService implements UserDetailsService {
 
     public void subscribeUser(String subscribingEmail, long subscribedId) {
         User user = userRepository.findByEmail(subscribingEmail).orElseThrow();
-        User subscribedUser = userRepository.findById(subscribedId).orElseThrow();
-        if (user.equals(subscribedUser)) {
+        if (user.getId() == subscribedId) {
             throw new SubscribeYourselfException("You cant subscribe to yourself");
         }
+        User subscribedUser = userRepository.findById(subscribedId).orElseThrow();
         user.getSubscriptions().add(subscribedUser);
         userRepository.save(user);
     }
 
     public void unsubscribeUser(String unsubscribingEmail, long unsubscribedId) {
         User user = userRepository.findByEmail(unsubscribingEmail).orElseThrow();
-        User subscribedUser = userRepository.findById(unsubscribedId).orElseThrow();
-        if (user.equals(subscribedUser)) {
+        if (user.getId() == unsubscribedId) {
             throw new SubscribeYourselfException("You cant subscribe to yourself");
         }
+        User subscribedUser = userRepository.findById(unsubscribedId).orElseThrow();
+
         user.getSubscriptions().remove(subscribedUser);
         userRepository.save(user);
     }
@@ -131,6 +140,10 @@ public class UserService implements UserDetailsService {
     public List<SubscribersData> loadAllSubscriptions(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Set<User> subscriptions = user.getSubscriptions();
+        return getListOfSubscribersData(subscriptions);
+    }
+
+    private List<SubscribersData> getListOfSubscribersData(Set<User> subscriptions) {
         return subscriptions.stream()
                 .map(users -> {
                     String userImagePath = imageBaseAddress + users.getId() + "/" + users.getImageName();
