@@ -135,12 +135,13 @@ body {
 }
 .main-exploration .post-content{
     font-style: italic;
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .main-exploration .user-image{
-    width:auto;
-    height: 120px;
+    max-width:120px;
+    max-height: 120px;
     float: left;
+    margin-right: 10px;
 }
 

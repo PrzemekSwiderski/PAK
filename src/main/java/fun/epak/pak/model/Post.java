@@ -21,6 +21,7 @@ public class Post {
     @ManyToOne
     private User user;
     private LocalDate createDate;
+    @Lob
     private String content;
     private Long repakId;
     private String imageAddress;
