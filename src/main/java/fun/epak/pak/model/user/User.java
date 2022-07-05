@@ -39,5 +39,9 @@ public class User {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
-
+    @ManyToMany
+    @JoinTable(name = "subscription",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscription_id"))
+    private Set<User> subscriptions;
 }

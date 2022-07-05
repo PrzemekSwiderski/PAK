@@ -12,6 +12,12 @@
     <main class="col-9 profile row">
         <div class="col-6">
             <p>${user.getUsername()}</p>
+            <form method="post" action='<c:url value="${user.getIsSubscribed() ? '/unsubscribe' : '/subscribe'}"/>'>
+                <input type="number" name="subscribedUserId" value="${user.getId()}" class="visually-hidden"/>
+                <button type="submit">
+                    ${user.getIsSubscribed() ? 'Prrzestań obserwować' : 'obserwuj'}
+                </button>
+            </form>
         </div>
         <div class="col-6">
             <img class="profile-iamge" src='<c:url value="${user.getImageNameAddress()}" />' alt="your profile photo">

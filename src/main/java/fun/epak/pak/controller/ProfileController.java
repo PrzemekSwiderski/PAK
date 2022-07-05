@@ -2,6 +2,7 @@ package fun.epak.pak.controller;
 
 import fun.epak.pak.infrastructure.ChangeUserDataRequest;
 import fun.epak.pak.infrastructure.OtherUserProfileData;
+import fun.epak.pak.infrastructure.SubscribersData;
 import fun.epak.pak.infrastructure.UserProfileData;
 import fun.epak.pak.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class ProfileController {
         return "/profile/profile";
     }
 
-    @PostMapping("my-profile")
+    @PostMapping("/my-profile")
     public RedirectView postUpdateToMyPRofile(ChangeUserDataRequest userData,
                                               @RequestParam("image") MultipartFile multipartFile,
                                               Principal principal) {
@@ -40,10 +42,30 @@ public class ProfileController {
         return new RedirectView("/my-profile");
     }
 
-    @GetMapping("profile/{id}")
-    public String getOtherProfile(@PathVariable long id, Model model) {
-        OtherUserProfileData user = userService.loadOtherUserProfileData(id);
+    @GetMapping("/profile/{id}")
+    public String getOtherProfile(@PathVariable long id, Model model, Principal principal) {
+        OtherUserProfileData user = userService.loadOtherUserProfileData(principal.getName(), id);
         model.addAttribute("user", user);
         return "/profile/otherProfile";
     }
+
+    @PostMapping("/subscribe")
+    public RedirectView subscribeUser(long subscribedUserId, Principal principal) {
+        userService.subscribeUser(principal.getName(), subscribedUserId);
+        return new RedirectView("/profile/" + subscribedUserId);
+    }
+
+    @PostMapping("/unsubscribe")
+    public RedirectView unsubscribeUser(long subscribedUserId, Principal principal) {
+        userService.unsubscribeUser(principal.getName(), subscribedUserId);
+        return new RedirectView("/profile/" + subscribedUserId);
+    }
+
+    @GetMapping("/subscriptions")
+    public String getAllSubscribers(Principal principal, Model model) {
+        List<SubscribersData> subscribers = userService.loadAllSubscriptions(principal.getName());
+        model.addAttribute("subscribers", subscribers);
+        return "/profile/subscriptions";
+    }
+
 }
