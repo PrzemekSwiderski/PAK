@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageData {
@@ -15,14 +17,17 @@ public class PageData {
     private long postId;
     private String content;
     private LocalDate createDate;
+    private List<ViewCommentData> comments;
 
-    public static PageData of(Post post, String path) {
+
+    public static PageData of(Post post, String path, List<ViewCommentData> comments) {
         return new PageData(post.getUser().getId(),
                 post.getUser().getUsername(),
                 path,
                 post.getId(),
                 post.getContent(),
-                post.getCreateDate());
+                post.getCreateDate(),
+                comments);
     }
 
 }
