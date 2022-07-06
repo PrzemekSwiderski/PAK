@@ -1,8 +1,10 @@
 package fun.epak.pak.controller;
 
+import fun.epak.pak.infrastructure.NewCommentRequest;
 import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
 import fun.epak.pak.infrastructure.UserWritingPostData;
+import fun.epak.pak.service.CommentService;
 import fun.epak.pak.service.PostService;
 import fun.epak.pak.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 public class WallController {
     private final PostService postService;
     private final UserService userService;
+    private final CommentService commentService;
 
     @GetMapping("/wall/exploration")
     public String getExploration(Model model, Principal principal) {
@@ -32,8 +35,14 @@ public class WallController {
     }
 
     @PostMapping("/new-post")
-    public RedirectView postNewPost(NewPostRequest post, Principal principal){
+    public RedirectView postNewPost(NewPostRequest post, Principal principal) {
         postService.saveNewPost(post, principal.getName());
+        return new RedirectView("/wall/exploration");
+    }
+
+    @PostMapping("/comment")
+    public RedirectView postNewComment(NewCommentRequest comment, Principal principal) {
+        commentService.addNewComment(comment, principal.getName());
         return new RedirectView("/wall/exploration");
     }
 }
