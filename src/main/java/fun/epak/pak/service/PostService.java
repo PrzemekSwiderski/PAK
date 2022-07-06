@@ -34,7 +34,7 @@ public class PostService {
     }
 
     private PageData mapToPageData(Post post) {
-        String userImagePath = ImageAddressUtil.userimage(imageBaseAddress, post.getUser());
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, post.getUser());
         return PageData.of(post, userImagePath);
     }
 

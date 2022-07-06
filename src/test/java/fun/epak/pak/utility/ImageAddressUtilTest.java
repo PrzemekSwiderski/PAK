@@ -15,7 +15,7 @@ class ImageAddressUtilTest {
                 .imageName("testboy1337.jpeg")
                 .build();
         //when
-        String result = ImageAddressUtil.userimage("/data/images/profiles/", user);
+        String result = ImageAddressUtil.userImage("/data/images/profiles/", user);
 
         //then
         assertEquals("/data/images/profiles/99/testboy1337.jpeg", result);
