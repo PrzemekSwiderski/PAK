@@ -11,9 +11,9 @@
 <div class="main-page">
     <main class="col-9 profile row">
         <c:forEach items="${subscribers}" var="subscriber">
-            <div>
-                <img class="user-image" src='<c:url value="${subscriber.getImageNameAddress()}"/>' alt="user image">
-                <div class="user-name">
+            <div class="single-sub">
+                <img class="sub-image" src='<c:url value="${subscriber.getImageNameAddress()}"/>' alt="user image">
+                <div class="sub-name">
                     <a href='<c:url value="/profile/${subscriber.getId()}"/>'>
                         ${subscriber.getUsername()}
                     </a>
