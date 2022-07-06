@@ -3,18 +3,19 @@ package fun.epak.pak.infrastructure;
 import fun.epak.pak.model.Post;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
 import java.time.LocalDate;
-@Getter
+
+@Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageData {
-    private Long userId;
-    private String username;
-    private String userImageAddress;
-    private long postId;
-    private String content;
-    private LocalDate createDate;
+    Long userId;
+    String username;
+    String userImageAddress;
+    long postId;
+    String content;
+    LocalDate createDate;
 
     public static PageData of(Post post, String path) {
         return new PageData(post.getUser().getId(),
