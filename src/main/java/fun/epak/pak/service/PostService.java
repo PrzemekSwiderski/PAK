@@ -2,15 +2,16 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
-import fun.epak.pak.infrastructure.ViewCommentData;
-import fun.epak.pak.model.Comment;
 import fun.epak.pak.model.Post;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.repository.PostRepository;
 import fun.epak.pak.repository.UserRepository;
+import fun.epak.pak.utility.ImageAddressUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
+    @Value("${image.address}")
+    private String imageBaseAddress;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
@@ -31,28 +34,18 @@ public class PostService {
     }
 
     private PageData mapToPageData(Post post) {
-        String userImagePath =
-                "/data/images/profiles/"
-                        + post.getUser().getId()
-                        + "/" + post.getUser().getImageName();
-        List<ViewCommentData> comments = post.getComments().stream().map(this::mapToViewCommentsData
-        ).collect(Collectors.toList());
-        return PageData.of(post, userImagePath, comments);
-    }
-
-    private ViewCommentData mapToViewCommentsData(Comment comment) {
-        String commentingUserImagePath =
-                "/data/images/profiles/"
-                        + comment.getUser().getId()
-                        + "/" + comment.getUser().getImageName();
-        return ViewCommentData.of(comment, commentingUserImagePath);
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, post.getUser());
+        return PageData.of(post, userImagePath);
     }
 
     public void saveNewPost(NewPostRequest post, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        Post newPost = new Post();
-        newPost.setUser(user);
-        newPost.setContent(post.getContent());
+        Post newPost = Post.builder()
+                .user(user)
+                .content(post.getContent())
+                .createDate(LocalDate.now())
+                .build();
+
         postRepository.save(newPost);
     }
 }

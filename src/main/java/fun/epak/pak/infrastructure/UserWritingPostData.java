@@ -3,14 +3,14 @@ package fun.epak.pak.infrastructure;
 import fun.epak.pak.model.user.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@Getter
+@Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserWritingPostData {
-    private long id;
-    private String username;
-    private String imageNameAddress;
+    long id;
+    String username;
+    String imageNameAddress;
 
     public static UserWritingPostData of(User user, String path) {
         return new UserWritingPostData(user.getId(), user.getUsername(), path);
