@@ -10,6 +10,8 @@ import fun.epak.pak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +23,12 @@ public class CommentService {
     public void addNewComment(NewCommentRequest newCommentRequest, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         Post post = postRepository.findById(newCommentRequest.getPostId()).orElseThrow();
-        Comment comment = new Comment();
-        comment.setUser(user);
-        comment.setPost(post);
-        comment.setContent(newCommentRequest.getContent());
+        Comment comment = Comment.builder()
+                .user(user)
+                .post(post)
+                .content(newCommentRequest.getContent())
+                .createDate(LocalDate.now())
+                .build();
         commentRepository.save(comment);
     }
 }
