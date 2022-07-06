@@ -20,7 +20,7 @@
             </form>
         </div>
         <div class="col-6">
-            <img class="profile-iamge" src='<c:url value="${user.getImageNameAddress()}" />' alt="your profile photo">
+            <img class="profile-iamge" src='<c:url value="${user.getImageNameAddress()}" />' alt="profile photo of ${user.getUsername()}">
         </div>
     </main>
     <%@include file="../dynamics/menu.jspf" %>

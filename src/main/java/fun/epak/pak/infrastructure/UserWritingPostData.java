@@ -5,18 +5,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-import java.time.LocalDate;
-
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserProfileData {
+public class UserWritingPostData {
     long id;
-    String email;
     String username;
     String imageNameAddress;
-    LocalDate registerDate;
 
-    public static UserProfileData of(User user, String path) {
-        return new UserProfileData(user.getId(), user.getEmail(), user.getUsername(), path, user.getRegisterDate());
+    public static UserWritingPostData of(User user, String path) {
+        return new UserWritingPostData(user.getId(), user.getUsername(), path);
     }
 }
