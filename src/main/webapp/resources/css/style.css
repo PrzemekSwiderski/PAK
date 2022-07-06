@@ -145,3 +145,24 @@ body {
     margin-right: 10px;
 }
 
+.single-sub {
+    margin-bottom: 25px;
+    background: rgba(255, 2555, 255, 0.01);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 6px 6px 20px rgba(255, 255, 255, 0.1);
+    color: aliceblue;
+}
+
+.main-page .sub-image {
+    max-width:180px;
+    max-height: 120px;
+    float: left;
+    margin-right: 20px;
+    border-radius: inherit;
+}
+
+.main-page .sub-name{
+    font-size: 50px;
+    vertical-align: central;
+}
