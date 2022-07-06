@@ -10,7 +10,7 @@
 
 <div class="main-exploration">
     <main class="col-9">
-        <div class="post">
+        <div class="new-post">
             <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
             <form action='<c:url value="/new-post"/>' method="post">
                 <textarea class="col-10" name="content" rows="3"
@@ -26,8 +26,18 @@
                         ${post.getUsername()}</a></div>
                 <div class="create-date">${post.getCreateDate()}</div>
                 <p class="post-content">${post.getContent()}</p>
+                <button class="reply-button" type="button" id="reply-button-${post.getPostId()}">Odpowiedz</button>
+                <div class="new-comment" id="reply-${post.getPostId()}" hidden>
+                    <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
+                    <form action='<c:url value="/comment"/>' method="post">
+                        <input type="number" name="postId" value="${post.getPostId()}" hidden>
+                        <textarea class="col-10" name="content" rows="3"
+                                  placeholder="Powiedz, co o tym myślisz ${user.getUsername()}"></textarea>
+                        <button type="submit">Wyślij</button>
+                    </form>
+                </div>
                 <c:forEach items="${post.getComments()}" var="comment">
-                    <div class="post">
+                    <div class="comment">
                         <img class="user-image" src='<c:url value="${comment.getUserImageAddress()}"/>'
                              alt=" ${comment.getUsername()} image">
                         <div class="user-name"><a href='<c:url value="/profile/${comment.getUserId()}"/>'>
@@ -41,6 +51,7 @@
     </main>
     <%@include file="../dynamics/menu.jspf" %>
 </div>
-</body>
 
+<script src='<c:url value="/resources/js/wall.js"/>'></script>
+</body>
 </html>
