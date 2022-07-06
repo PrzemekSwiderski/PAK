@@ -14,6 +14,7 @@ import fun.epak.pak.model.user.UserRole;
 import fun.epak.pak.repository.UserRepository;
 import fun.epak.pak.repository.UserRoleRepository;
 import fun.epak.pak.utility.FileUploadUtil;
+import fun.epak.pak.utility.ImageAddressUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,7 @@ public class UserService implements UserDetailsService {
 
     public UserProfileData loadUserProfileData(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return UserProfileData.of(user, userImagePath);
     }
 
@@ -113,7 +114,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id).orElseThrow();
         User viewer = userRepository.findByEmail(email).orElseThrow();
         boolean contains = viewer.getSubscriptions().contains(user);
-        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return OtherUserProfileData.of(user, userImagePath, contains);
     }
 
@@ -148,13 +149,13 @@ public class UserService implements UserDetailsService {
     }
 
     private SubscribersData mapToSubscribersData(User user) {
-        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return SubscribersData.of(user, userImagePath);
     }
 
-    public UserWritingPostData loadUserWritingPostData(String email){
+    public UserWritingPostData loadUserWritingPostData(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String userImagePath = imageBaseAddress + user.getId() + "/" + user.getImageName();
+        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return UserWritingPostData.of(user, userImagePath);
     }
 
