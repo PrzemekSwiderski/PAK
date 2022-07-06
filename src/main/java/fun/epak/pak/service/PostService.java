@@ -2,6 +2,8 @@ package fun.epak.pak.service;
 
 import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
+import fun.epak.pak.infrastructure.ViewCommentData;
+import fun.epak.pak.model.Comment;
 import fun.epak.pak.model.Post;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.repository.PostRepository;
@@ -35,7 +37,15 @@ public class PostService {
 
     private PageData mapToPageData(Post post) {
         String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, post.getUser());
-        return PageData.of(post, userImagePath);
+        List<ViewCommentData> comments = post.getComments().stream()
+                .map(this::mapToViewCommentsData)
+                .collect(Collectors.toList());
+        return PageData.of(post, userImagePath, comments);
+    }
+
+    private ViewCommentData mapToViewCommentsData(Comment comment) {
+        String commentingUserImagePath = ImageAddressUtil.userImage(imageBaseAddress, comment.getUser());
+        return ViewCommentData.of(comment, commentingUserImagePath);
     }
 
     public void saveNewPost(NewPostRequest post, String email) {

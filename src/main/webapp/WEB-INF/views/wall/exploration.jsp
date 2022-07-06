@@ -20,11 +20,22 @@
         </div>
         <c:forEach items="${posts}" var="post">
             <div class="post">
-                <img class="user-image" src='<c:url value="${post.getUserImageAddress()}"/>' alt="user image" >
-                <div class="user-name"><a  href = '<c:url value="/profile/${post.getUserId()}"/>'>
+                <img class="user-image" src='<c:url value="${post.getUserImageAddress()}"/>'
+                     alt="${post.getUsername()} image">
+                <div class="user-name"><a href='<c:url value="/profile/${post.getUserId()}"/>'>
                         ${post.getUsername()}</a></div>
                 <div class="create-date">${post.getCreateDate()}</div>
                 <p class="post-content">${post.getContent()}</p>
+                <c:forEach items="${post.getComments()}" var="comment">
+                    <div class="post">
+                        <img class="user-image" src='<c:url value="${comment.getUserImageAddress()}"/>'
+                             alt=" ${comment.getUsername()} image">
+                        <div class="user-name"><a href='<c:url value="/profile/${comment.getUserId()}"/>'>
+                                ${comment.getUsername()}</a></div>
+                        <div class="create-date">${comment.getCreateDate()}</div>
+                        <p class="post-content">${comment.getContent()}</p>
+                    </div>
+                </c:forEach>
             </div>
         </c:forEach>
     </main>

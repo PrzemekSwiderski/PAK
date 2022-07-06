@@ -13,7 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,4 +34,6 @@ public class Post {
     private String content;
     private Long repakId;
     private String imageAddress;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 }
