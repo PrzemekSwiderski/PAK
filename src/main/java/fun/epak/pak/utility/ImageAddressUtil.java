@@ -4,7 +4,7 @@ import fun.epak.pak.model.user.User;
 
 public class ImageAddressUtil {
 
-    public static String userImage(String prefixOfAddress, User user) {
+    public static String userimage(String prefixOfAddress, User user) {
         return prefixOfAddress + user.getId() + "/" + user.getImageName();
     }
 }

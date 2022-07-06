@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService {
 
     public UserProfileData loadUserProfileData(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String userImagePath = ImageAddressUtil.UserImage(imageBaseAddress, user);
+        String userImagePath = ImageAddressUtil.userimage(imageBaseAddress, user);
         return UserProfileData.of(user, userImagePath);
     }
 
@@ -114,7 +114,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id).orElseThrow();
         User viewer = userRepository.findByEmail(email).orElseThrow();
         boolean contains = viewer.getSubscriptions().contains(user);
-        String userImagePath = ImageAddressUtil.UserImage(imageBaseAddress, user);
+        String userImagePath = ImageAddressUtil.userimage(imageBaseAddress, user);
         return OtherUserProfileData.of(user, userImagePath, contains);
     }
 
@@ -149,13 +149,13 @@ public class UserService implements UserDetailsService {
     }
 
     private SubscribersData mapToSubscribersData(User user) {
-        String userImagePath = ImageAddressUtil.UserImage(imageBaseAddress, user);
+        String userImagePath = ImageAddressUtil.userimage(imageBaseAddress, user);
         return SubscribersData.of(user, userImagePath);
     }
 
     public UserWritingPostData loadUserWritingPostData(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String userImagePath = ImageAddressUtil.UserImage(imageBaseAddress, user);
+        String userImagePath = ImageAddressUtil.userimage(imageBaseAddress, user);
         return UserWritingPostData.of(user, userImagePath);
     }
 
