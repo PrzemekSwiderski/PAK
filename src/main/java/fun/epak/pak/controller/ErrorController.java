@@ -1,5 +1,7 @@
 package fun.epak.pak.controller;
 
+import fun.epak.pak.exceptions.NoPostException;
+import fun.epak.pak.exceptions.NoUserException;
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.exceptions.SubscribeYourselfException;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
@@ -18,4 +20,15 @@ public class ErrorController {
     public String getErrorSubscribeView() {
         return "/errors/subscribe";
     }
+
+    @ExceptionHandler(NoUserException.class)
+    public String getErrorNoUserView() {
+        return "/errors/noUser";
+    }
+
+    @ExceptionHandler(NoPostException.class)
+    public String getErrorNoPostView() {
+        return "/errors/noPost";
+    }
 }
+

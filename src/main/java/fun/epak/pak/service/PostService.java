@@ -1,5 +1,6 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.exceptions.NoUserException;
 import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
 import fun.epak.pak.infrastructure.ViewCommentData;
@@ -51,7 +52,8 @@ public class PostService {
     }
 
     public void saveNewPost(NewPostRequest post, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
         Post newPost = Post.builder()
                 .user(user)
                 .content(post.getContent())
