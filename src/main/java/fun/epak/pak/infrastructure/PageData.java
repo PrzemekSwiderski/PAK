@@ -1,14 +1,15 @@
 package fun.epak.pak.infrastructure;
 
-import fun.epak.pak.model.Post;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Value;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Value
+@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PageData {
     Long userId;
@@ -16,17 +17,7 @@ public class PageData {
     String userImageAddress;
     long postId;
     String content;
+    String postImageAddress;
     LocalDate createDate;
     List<ViewCommentData> comments;
-
-    public static PageData of(Post post, String path, List<ViewCommentData> comments) {
-        return new PageData(post.getUser().getId(),
-                post.getUser().getUsername(),
-                path,
-                post.getId(),
-                post.getContent(),
-                post.getCreateDate(),
-                comments);
-    }
-
 }

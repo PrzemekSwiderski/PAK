@@ -42,17 +42,17 @@
                 <input type="text" name="email" class="form-control" id="reg-mail" placeholder="adres email" required>
             </div>
             <div class="form-group mt-3">
-                <label for="log-password">Hasło</label>
+                <label>Hasło</label>
                 <input type="password" class="form-control" name="password" id="reg-password" placeholder="hasło"
                        required>
             </div>
             <div class="form-group mt-3">
-                <label for="log-password">Nick</label>
+                <label>Nick</label>
                 <input type="text" class="form-control" name="username" id="reg-username" placeholder="Twój nick"
                        required>
             </div>
             <div class="form-group mt-3">
-                <label for="log-password">Wgraj zdjęcie</label>
+                <label>Wgraj zdjęcie</label>
                 <input type="file" class="form-control" name="image" id="reg-image-address"
                        accept="image/png, image/jpeg"
                        required>

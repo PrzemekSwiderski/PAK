@@ -8,12 +8,12 @@ import fun.epak.pak.service.CommentService;
 import fun.epak.pak.service.PostService;
 import fun.epak.pak.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
@@ -28,7 +28,7 @@ public class WallController {
     private final CommentService commentService;
 
     @GetMapping
-    public String getMainWall(Model model, Principal principal){
+    public String getMainWall(Model model, Principal principal) {
         List<PageData> posts = postService.loadAllMainWallPageData(principal.getName());
         UserWritingPostData user = userService.loadUserWritingPostData(principal.getName());
         model.addAttribute("posts", posts);
@@ -46,8 +46,10 @@ public class WallController {
     }
 
     @PostMapping("/new-post")
-    public RedirectView postNewPost(NewPostRequest post, Principal principal) {
-        postService.saveNewPost(post, principal.getName());
+    public RedirectView postNewPost(NewPostRequest post,
+                                    @RequestParam("image") MultipartFile multipartFile,
+                                    Principal principal) {
+        postService.saveNewPost(post, multipartFile, principal.getName());
         return new RedirectView("/exploration");
     }
 

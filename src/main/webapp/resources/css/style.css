@@ -78,11 +78,11 @@ body {
     height: auto;
 }
 
-.profile .is-readonly .btn-save{
+.profile .is-readonly .btn-save {
     display: none;
 }
 
-.profile .is-readonly .btn-edit{
+.profile .is-readonly .btn-edit {
     color: red;
 }
 
@@ -97,26 +97,30 @@ body {
 
 }
 
-.profile .is-editing .btn-edit{
-    display: none;
-}
-.profile .btn-save{
-    color: red;
-}
-.profile .new-image .is-readonly{
+.profile .is-editing .btn-edit {
     display: none;
 }
 
-.profile .new-image .is-editing{
+.profile .btn-save {
+    color: red;
+}
+
+.profile .new-image .is-readonly {
     display: none;
 }
-.main-exploration{
+
+.profile .new-image .is-editing {
+    display: none;
+}
+
+.main-exploration {
     width: 1200px;
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
     margin: 10px auto;
 }
+
 .main-exploration .post, .new-comment, .comment, .new-post {
     margin-bottom: 25px;
     background: rgba(255, 2555, 255, 0.01);
@@ -126,23 +130,34 @@ body {
     color: aliceblue;
     font-size: 30px;
 }
-.main-exploration .user-name{
+
+.main-exploration .user-name {
     font-size: 30px;
 }
-.main-exploration .create-date{
+
+.main-exploration .create-date {
     color: yellow;
     font-size: 20px;
 }
-.main-exploration .post-content{
+
+.main-exploration .post-content {
     font-style: italic;
     font-size: 20px;
 }
 
-.main-exploration .user-image{
-    max-width:120px;
+.main-exploration .user-image {
+    max-width: 120px;
     max-height: 120px;
     float: left;
     margin-right: 10px;
+}
+
+.main-exploration .post-image {
+    max-width: 800px;
+    max-height: 800px;
+    padding: 10px 0 10px 0;
+    margin: auto;
+    display: block;
 }
 
 .single-sub {
@@ -155,14 +170,14 @@ body {
 }
 
 .main-page .sub-image {
-    max-width:180px;
+    max-width: 180px;
     max-height: 120px;
     float: left;
     margin-right: 20px;
     border-radius: inherit;
 }
 
-.main-page .sub-name{
+.main-page .sub-name {
     font-size: 50px;
     vertical-align: central;
 }

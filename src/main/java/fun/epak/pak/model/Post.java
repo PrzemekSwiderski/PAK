@@ -33,8 +33,7 @@ public class Post {
     private LocalDate createDate;
     @Lob
     private String content;
-    private Long repakId;
-    private String imageAddress;
+    private String imageName;
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
 }
