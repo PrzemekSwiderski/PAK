@@ -90,7 +90,7 @@ public class PostService {
 
     private Stream<Long> extractPostIdsCommentedBySubs(Set<User> subscriptions) {
         return subscriptions.stream()
-                .flatMap(user1 -> user1.getComments().stream())
+                .flatMap(user -> user.getComments().stream())
                 .map(Comment::getPost)
                 .map(Post::getId);
     }
