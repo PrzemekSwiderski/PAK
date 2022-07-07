@@ -34,8 +34,8 @@ public class WebServiceConfig{
         http.authorizeHttpRequests((auth) -> {
                     try {
                         auth
-                                .antMatchers("/auth").permitAll()
-                                .antMatchers("/").hasAuthority("USER")
+                                .antMatchers("/auth", "/resources/**", "/webjars/**", "/register").permitAll()
+                                .antMatchers("/**").hasAuthority("USER")
                                 .and()
                                 .csrf().disable()
                                 .headers().frameOptions().disable()

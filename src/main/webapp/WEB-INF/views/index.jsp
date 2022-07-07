@@ -7,39 +7,49 @@
 
 <%@include file="dynamics/banner.jspf" %>
 
-<div class="main-page">
-<%--    <img src='<c:url value="/data/images/profiles/1/przemek.jpg"/>' alt="testowe zdjecie">--%>
+<div class="main-exploration">
     <main class="col-9">
-        <div class="post">
-            <span>${test}</span>
-            <span>Data</span>
-            <p>"Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation
-                ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum."
-            </p>
+        <div class="new-post">
+            <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
+            <form action='<c:url value="/new-post"/>' method="post">
+                <textarea class="col-10" name="content" rows="3"
+                          placeholder="Powiedz, co ci chodzi po głowie ${user.getUsername()}"></textarea>
+                <button type="submit">Wyślij</button>
+            </form>
         </div>
-        <div class="post">
-            <span>Imię i nazwisko</span>
-            <span>Data</span>
-            <p>"Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation
-                ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum."
-            </p>
-        </div>
+        <c:forEach items="${posts}" var="post">
+            <div class="post">
+                <img class="user-image" src='<c:url value="${post.getUserImageAddress()}"/>'
+                     alt="${post.getUsername()} image">
+                <div class="user-name"><a href='<c:url value="/profile/${post.getUserId()}"/>'>
+                        ${post.getUsername()}</a></div>
+                <div class="create-date">${post.getCreateDate()}</div>
+                <p class="post-content">${post.getContent()}</p>
+                <button class="reply-button" type="button" id="reply-button-${post.getPostId()}">Odpowiedz</button>
+                <div class="new-comment" id="reply-${post.getPostId()}" hidden>
+                    <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
+                    <form action='<c:url value="/comment"/>' method="post">
+                        <input type="number" name="postId" value="${post.getPostId()}" hidden>
+                        <textarea class="col-10" name="content" rows="3"
+                                  placeholder="Powiedz, co o tym myślisz ${user.getUsername()}"></textarea>
+                        <button type="submit">Wyślij</button>
+                    </form>
+                </div>
+                <c:forEach items="${post.getComments()}" var="comment">
+                    <div class="comment">
+                        <img class="user-image" src='<c:url value="${comment.getUserImageAddress()}"/>'
+                             alt=" ${comment.getUsername()} image">
+                        <div class="user-name"><a href='<c:url value="/profile/${comment.getUserId()}"/>'>
+                                ${comment.getUsername()}</a></div>
+                        <div class="create-date">${comment.getCreateDate()}</div>
+                        <p class="post-content">${comment.getContent()}</p>
+                    </div>
+                </c:forEach>
+            </div>
+        </c:forEach>
     </main>
     <%@include file="dynamics/menu.jspf" %>
 </div>
+<script src='<c:url value="/resources/js/wall.js"/>'></script>
 </body>
 </html>
