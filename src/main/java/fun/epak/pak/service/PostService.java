@@ -1,5 +1,6 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.infrastructure.NewPostRequest;
 import fun.epak.pak.infrastructure.PageData;
 import fun.epak.pak.infrastructure.ViewCommentData;
@@ -8,11 +9,16 @@ import fun.epak.pak.model.Post;
 import fun.epak.pak.model.user.User;
 import fun.epak.pak.repository.PostRepository;
 import fun.epak.pak.repository.UserRepository;
+import fun.epak.pak.utility.FileUploadUtil;
 import fun.epak.pak.utility.ImageAddressUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -24,10 +30,13 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class PostService {
 
-    @Value("${image.address}")
-    private String imageBaseAddress;
+    @Value("${user.image.address}")
+    private String userImageBaseAddress;
+    @Value("${post.image.address}")
+    private String postImageBaseAddress;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public List<PageData> loadAllPageData() {
         List<Post> posts = postRepository.findAll();
@@ -38,26 +47,60 @@ public class PostService {
     }
 
     private PageData mapToPageData(Post post) {
-        String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, post.getUser());
+        String userImagePath = ImageAddressUtil.userImage(userImageBaseAddress, post.getUser());
         List<ViewCommentData> comments = post.getComments().stream()
                 .map(this::mapToViewCommentsData)
                 .collect(Collectors.toList());
-        return PageData.of(post, userImagePath, comments);
+        PageData.PageDataBuilder pageDataBuilder = PageData.builder()
+                .userId(post.getUser().getId())
+                .username(post.getUser().getUsername())
+                .userImageAddress(userImagePath)
+                .postId(post.getId())
+                .content(post.getContent())
+                .createDate(post.getCreateDate())
+                .comments(comments);
+        if (post.getImageName() != null) {
+            String postImagePath = ImageAddressUtil.postImage(postImageBaseAddress, post);
+            pageDataBuilder.postImageAddress(postImagePath).build();
+        }
+        return pageDataBuilder.build();
     }
 
     private ViewCommentData mapToViewCommentsData(Comment comment) {
-        String commentingUserImagePath = ImageAddressUtil.userImage(imageBaseAddress, comment.getUser());
+        String commentingUserImagePath = ImageAddressUtil.userImage(userImageBaseAddress, comment.getUser());
         return ViewCommentData.of(comment, commentingUserImagePath);
     }
 
-    public void saveNewPost(NewPostRequest post, String email) {
+    public void saveNewPost(NewPostRequest post, MultipartFile multipartFile, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
-        Post newPost = Post.builder()
+        Post.PostBuilder postBuilder = Post.builder()
                 .user(user)
                 .content(post.getContent())
-                .createDate(LocalDate.now())
-                .build();
-        postRepository.save(newPost);
+                .createDate(LocalDate.now());
+        savePostWithOrWithoutImage(multipartFile, postBuilder);
+    }
+
+    private void savePostWithOrWithoutImage(MultipartFile multipartFile, Post.PostBuilder postBuilder) {
+        if (!multipartFile.isEmpty()) {
+            Post newPost = postBuilder
+                    .imageName(multipartFile.getOriginalFilename())
+                    .build();
+            Post savedPost = postRepository.save(newPost);
+            saveFile(multipartFile, savedPost);
+        } else {
+            Post newPost = postBuilder.build();
+            postRepository.save(newPost);
+        }
+    }
+
+    private void saveFile(MultipartFile multipartFile, Post post) {
+        String uploadDir = postImageBaseAddress + post.getId();
+        try {
+            FileUploadUtil.saveFile(uploadDir, post.getImageName(), multipartFile);
+        } catch (IOException e) {
+            logger.error(e.getLocalizedMessage());
+            throw new SaveFileException("Error at file upload at: " + uploadDir + "with file: " + post.getImageName());
+        }
     }
 
     public List<PageData> loadAllMainWallPageData(String email) {
@@ -84,7 +127,7 @@ public class PostService {
         List<Comment> comments = user.getComments();
         Stream<Long> postIdFromComments = extracPostIdsFromComments(comments);
         Stream<Long> postIdsCommentedBySubs = extractPostIdsCommentedBySubs(subscriptions);
-        Set<Long> allPostsIds =  Stream.concat(postIdFromComments, postIdsCommentedBySubs).collect(Collectors.toSet());
+        Set<Long> allPostsIds = Stream.concat(postIdFromComments, postIdsCommentedBySubs).collect(Collectors.toSet());
         return postRepository.findAllById(allPostsIds);
     }
 

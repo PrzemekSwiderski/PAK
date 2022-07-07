@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    @Value("${image.address}")
+    @Value("${user.image.address}")
     private String imageBaseAddress;
 
     private final UserRoleRepository userRoleRepository;

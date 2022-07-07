@@ -12,9 +12,14 @@
     <main class="col-9">
         <div class="new-post">
             <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
-            <form action='<c:url value="/new-post"/>' method="post">
+            <form action='<c:url value="/new-post"/>' method="post" enctype="multipart/form-data">
                 <textarea class="col-10" name="content" rows="3"
-                          placeholder="Powiedz, co ci chodzi po głowie ${user.getUsername()}"></textarea>
+                          placeholder="Powiedz, co ci chodzi po głowie ${user.getUsername()}" required></textarea>
+                <div class="form-group mt-3">
+                    <label>Możesz dodać zdjęcie</label>
+                    <input type="file" class="form-control" name="image" id="post-image-address"
+                           accept="image/png, image/jpeg">
+                </div>
                 <button type="submit">Wyślij</button>
             </form>
         </div>
@@ -26,6 +31,10 @@
                         ${post.getUsername()}</a></div>
                 <div class="create-date">${post.getCreateDate()}</div>
                 <p class="post-content">${post.getContent()}</p>
+                <c:if test="${post.getPostImageAddress() != null}">
+                <img class="post-image" src='<c:url value="${post.getPostImageAddress()}"/>'
+                     alt="image of post id ${post.getPostId()}">
+                </c:if>
                 <button class="reply-button" type="button" id="reply-button-${post.getPostId()}">Odpowiedz</button>
                 <div class="new-comment" id="reply-${post.getPostId()}" hidden>
                     <img class="user-image" src='<c:url value="${user.getImageNameAddress()}"/>' alt="user image">
@@ -39,7 +48,7 @@
                 <c:forEach items="${post.getComments()}" var="comment">
                     <div class="comment">
                         <img class="user-image" src='<c:url value="${comment.getUserImageAddress()}"/>'
-                             alt=" ${comment.getUsername()} image">
+                             alt="${comment.getUsername()} image">
                         <div class="user-name"><a href='<c:url value="/profile/${comment.getUserId()}"/>'>
                                 ${comment.getUsername()}</a></div>
                         <div class="create-date">${comment.getCreateDate()}</div>
