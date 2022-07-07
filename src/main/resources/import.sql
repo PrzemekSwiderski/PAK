@@ -41,8 +41,11 @@ INSERT INTO Post (user_id, create_date, content) VALUES(7, '2022-07-05', 'Zapras
 INSERT INTO Post (user_id, create_date, content) VALUES(6, '2022-07-05', 'W piątek ewakuacja uczestników z powodu armagedonu pogodowego, podwójna lipa.');
 INSERT INTO Post (user_id, create_date, content) VALUES(9, '2022-07-05', 'Zapraszamy w sobotę 25 czerwca 2022 r. do Biskupca na cykliczną imprezę Biskupiecki Kabareton 2022. W pierwszy weekend wakacji w Amfiteatrze Miejskim wystąpią znani artyści kabaretowi.');
 INSERT INTO Post (user_id, create_date, content) VALUES(10, '2022-07-05', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.');
-INSERT INTO Post (user_id, create_date, content) VALUES(10, '2022-07-05', 'Aktorka teatralna i filmowa, wybitna aktorka komediowa, gwiazda polskiego kabaretu i estrady. Urodziła się 17 września 1912 roku w Warszawie, zmarła 3 marca 2011 w Skolimowie.');
-INSERT INTO Post (user_id, create_date, content) VALUES(5, '2022-07-05', 'Mnie historia w ogóle wojny światowej pasjonuje, wciągnęła. To jest moje życie. Czasami zastanawiam się, na ile to jest życie 12-latków, 15-latków, 20-latków, tych którzy urodzili się bardzo, bardzo dawno po wojnie. Okazuje się, że jednak wciąż ta tematyka jest fascynująca.',);
-INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (2, 1, '2022-06-28', 'Zacny post milordzie')
-INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (3, 1, '2022-06-28', 'Woof, woof, wooooooof!')
+INSERT INTO Post (user_id, create_date, content, image_name) VALUES(10, '2022-07-05', 'Aktorka teatralna i filmowa, wybitna aktorka komediowa, gwiazda polskiego kabaretu i estrady. Urodziła się 17 września 1912 roku w Warszawie, zmarła 3 marca 2011 w Skolimowie.', 'wolverine.jpg');
+INSERT INTO Post (user_id, create_date, content) VALUES(5, '2022-07-05', 'Mnie historia w ogóle wojny światowej pasjonuje, wciągnęła. To jest moje życie. Czasami zastanawiam się, na ile to jest życie 12-latków, 15-latków, 20-latków, tych którzy urodzili się bardzo, bardzo dawno po wojnie. Okazuje się, że jednak wciąż ta tematyka jest fascynująca.');
+INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (2, 1, '2022-06-28', 'Zacny post milordzie');
+INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (3, 1, '2022-06-28', 'Woof, woof, wooooooof!');
+INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (5, 22, '2022-06-28', 'Test wiadmosci pana Bogusława');
+INSERT INTO Comment (user_id, post_id, create_date, content) VALUES (1, 21, '2022-06-28', 'Test woiadmosci mojej');
+INSERT INTO Subscription VALUES (1, 5);
 COMMIT;
