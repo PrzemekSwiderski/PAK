@@ -1,5 +1,6 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.exceptions.NoUserException;
 import fun.epak.pak.exceptions.SaveFileException;
 import fun.epak.pak.exceptions.SubscribeYourselfException;
 import fun.epak.pak.infrastructure.ChangeUserDataRequest;
@@ -90,13 +91,15 @@ public class UserService implements UserDetailsService {
     }
 
     public UserProfileData loadUserProfileData(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
         String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return UserProfileData.of(user, userImagePath);
     }
 
     public void saveChangedUser(ChangeUserDataRequest userData, MultipartFile multipartFile, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
         if (userData.getUsername() != null && !"".equals(userData.getUsername())) {
             user.setUsername(userData.getUsername());
         }
@@ -140,7 +143,8 @@ public class UserService implements UserDetailsService {
     }
 
     public List<SubscribersData> loadAllSubscriptions(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
         Set<User> subscriptions = user.getSubscriptions();
         return subscriptions.stream()
                 .map(this::mapToSubscribersData)
@@ -154,7 +158,8 @@ public class UserService implements UserDetailsService {
     }
 
     public UserWritingPostData loadUserWritingPostData(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
         String userImagePath = ImageAddressUtil.userImage(imageBaseAddress, user);
         return UserWritingPostData.of(user, userImagePath);
     }

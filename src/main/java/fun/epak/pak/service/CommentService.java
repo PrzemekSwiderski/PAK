@@ -1,5 +1,7 @@
 package fun.epak.pak.service;
 
+import fun.epak.pak.exceptions.NoPostException;
+import fun.epak.pak.exceptions.NoUserException;
 import fun.epak.pak.infrastructure.NewCommentRequest;
 import fun.epak.pak.model.Comment;
 import fun.epak.pak.model.Post;
@@ -21,8 +23,10 @@ public class CommentService {
     private final UserRepository userRepository;
 
     public void addNewComment(NewCommentRequest newCommentRequest, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        Post post = postRepository.findById(newCommentRequest.getPostId()).orElseThrow();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoUserException("There is no user with such an email:" + email));
+        Post post = postRepository.findById(newCommentRequest.getPostId())
+                .orElseThrow(() -> new NoPostException("There is no post"));
         Comment comment = Comment.builder()
                 .user(user)
                 .post(post)
