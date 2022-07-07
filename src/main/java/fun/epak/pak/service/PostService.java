@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -66,7 +65,7 @@ public class PostService {
         Set<User> subscriptions = user.getSubscriptions();
         List<Post> allPostsBySubs = getPostsOfSubscribed(user, subscriptions);
         List<Post> allPostsByComments = getPostsWithUserOrSubscribedComments(user, subscriptions);
-        List<Post> allMainWallPosts = getAllPosts(allPostsBySubs, allPostsByComments);
+        Set<Post> allMainWallPosts = getAllPosts(allPostsBySubs, allPostsByComments);
         return allMainWallPosts.stream()
                 .map(this::mapToPageData)
                 .sorted(Comparator.comparing(PageData::getPostId).reversed())
@@ -83,24 +82,27 @@ public class PostService {
 
     private List<Post> getPostsWithUserOrSubscribedComments(User user, Set<User> subscriptions) {
         List<Comment> comments = user.getComments();
-        Set<Long> setOfPostIdFromComments = comments.stream()
-                .map(Comment::getPost)
-                .map(Post::getId)
-                .collect(Collectors.toSet());
-        Set<Long> setOfPostIdsCommentedBySubs = subscriptions.stream()
-                .map(User::getComments)
-                .map(com -> com.stream().map(Comment::getPost))
-                .map(post -> post.map(Post::getId))
-                .reduce(Stream::concat).orElse(Stream.<Long>builder().build())
-                .collect(Collectors.toSet());
-        Set<Long> allPostsIds = new HashSet<>(setOfPostIdFromComments);
-        allPostsIds.addAll(setOfPostIdsCommentedBySubs);
+        Stream<Long> postIdFromComments = extracPostIdsFromComments(comments);
+        Stream<Long> postIdsCommentedBySubs = extractPostIdsCommentedBySubs(subscriptions);
+        Set<Long> allPostsIds =  Stream.concat(postIdFromComments, postIdsCommentedBySubs).collect(Collectors.toSet());
         return postRepository.findAllById(allPostsIds);
     }
 
-    private List<Post> getAllPosts(List<Post> allPostsBySubs, List<Post> allPostsByComments) {
+    private Stream<Long> extractPostIdsCommentedBySubs(Set<User> subscriptions) {
+        return subscriptions.stream()
+                .flatMap(user1 -> user1.getComments().stream())
+                .map(Comment::getPost)
+                .map(Post::getId);
+    }
+
+    private Stream<Long> extracPostIdsFromComments(List<Comment> comments) {
+        return comments.stream()
+                .map(Comment::getPost)
+                .map(Post::getId);
+    }
+
+    private Set<Post> getAllPosts(List<Post> allPostsBySubs, List<Post> allPostsByComments) {
         return Stream.concat(allPostsBySubs.stream(), allPostsByComments.stream())
-                .distinct()
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }
