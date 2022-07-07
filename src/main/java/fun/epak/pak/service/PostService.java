@@ -51,13 +51,19 @@ public class PostService {
         List<ViewCommentData> comments = post.getComments().stream()
                 .map(this::mapToViewCommentsData)
                 .collect(Collectors.toList());
+        PageData.PageDataBuilder pageDataBuilder = PageData.builder()
+                .userId(post.getUser().getId())
+                .username(post.getUser().getUsername())
+                .userImageAddress(userImagePath)
+                .postId(post.getId())
+                .content(post.getContent())
+                .createDate(post.getCreateDate())
+                .comments(comments);
         if (post.getImageName() != null) {
             String postImagePath = ImageAddressUtil.postImage(postImageBaseAddress, post);
-            return buildPageDataWithImage(post, userImagePath, postImagePath, comments);
-        } else {
-            return buildPageDataWithoutImage(post, userImagePath, comments);
+            pageDataBuilder.postImageAddress(postImagePath).build();
         }
-
+        return pageDataBuilder.build();
     }
 
     private ViewCommentData mapToViewCommentsData(Comment comment) {
@@ -65,54 +71,30 @@ public class PostService {
         return ViewCommentData.of(comment, commentingUserImagePath);
     }
 
-    private PageData buildPageDataWithImage(Post post, String userImagePath, String postImagePath, List<ViewCommentData> comments) {
-        return PageData.builder()
-                .userId(post.getUser().getId())
-                .username(post.getUser().getUsername())
-                .userImageAddress(userImagePath)
-                .postId(post.getId())
-                .content(post.getContent())
-                .postImageAddress(postImagePath)
-                .createDate(post.getCreateDate())
-                .comments(comments)
-                .build();
-    }
-
-    private PageData buildPageDataWithoutImage(Post post, String userImagePath, List<ViewCommentData> comments) {
-        return PageData.builder()
-                .userId(post.getUser().getId())
-                .username(post.getUser().getUsername())
-                .userImageAddress(userImagePath)
-                .postId(post.getId())
-                .content(post.getContent())
-                .createDate(post.getCreateDate())
-                .comments(comments)
-                .build();
-    }
-
     public void saveNewPost(NewPostRequest post, MultipartFile multipartFile, String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
+        Post.PostBuilder postBuilder = Post.builder()
+                .user(user)
+                .content(post.getContent())
+                .createDate(LocalDate.now());
+        savePostWithOrWithoutImage(multipartFile, postBuilder);
+    }
+
+    private void savePostWithOrWithoutImage(MultipartFile multipartFile, Post.PostBuilder postBuilder) {
         if (!multipartFile.isEmpty()) {
-            Post newPost = Post.builder()
-                    .user(user)
-                    .content(post.getContent())
+            Post newPost = postBuilder
                     .imageName(multipartFile.getOriginalFilename())
-                    .createDate(LocalDate.now())
                     .build();
             Post savedPost = postRepository.save(newPost);
             saveFile(multipartFile, savedPost);
         } else {
-            Post newPost = Post.builder()
-                    .user(user)
-                    .content(post.getContent())
-                    .createDate(LocalDate.now())
-                    .build();
-            Post savedPost = postRepository.save(newPost);
+            Post newPost = postBuilder.build();
+            postRepository.save(newPost);
         }
     }
 
     private void saveFile(MultipartFile multipartFile, Post post) {
-        String uploadDir = "data/images/post/" + post.getId();
+        String uploadDir = postImageBaseAddress + post.getId();
         try {
             FileUploadUtil.saveFile(uploadDir, post.getImageName(), multipartFile);
         } catch (IOException e) {
