@@ -8,6 +8,8 @@ import fun.epak.pak.service.CommentService;
 import fun.epak.pak.service.PostService;
 import fun.epak.pak.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,16 @@ public class WallController {
     private final UserService userService;
     private final CommentService commentService;
 
-    @GetMapping("/wall/exploration")
+    @GetMapping
+    public String getMainWall(Model model, Principal principal){
+        List<PageData> posts = postService.loadAllMainWallPageData(principal.getName());
+        UserWritingPostData user = userService.loadUserWritingPostData(principal.getName());
+        model.addAttribute("posts", posts);
+        model.addAttribute("user", user);
+        return "index";
+    }
+
+    @GetMapping("/exploration")
     public String getExploration(Model model, Principal principal) {
         List<PageData> posts = postService.loadAllPageData();
         UserWritingPostData user = userService.loadUserWritingPostData(principal.getName());
@@ -37,13 +48,13 @@ public class WallController {
     @PostMapping("/new-post")
     public RedirectView postNewPost(NewPostRequest post, Principal principal) {
         postService.saveNewPost(post, principal.getName());
-        return new RedirectView("/wall/exploration");
+        return new RedirectView("/exploration");
     }
 
     @PostMapping("/comment")
     public RedirectView postNewComment(NewCommentRequest comment, Principal principal) {
         commentService.addNewComment(comment, principal.getName());
-        return new RedirectView("/wall/exploration");
+        return new RedirectView("/exploration");
     }
 }
 

@@ -35,7 +35,7 @@ public class WebServiceConfig{
                     try {
                         auth
                                 .antMatchers("/auth").permitAll()
-                                .antMatchers("/").hasAuthority("USER")
+                                .antMatchers("/", "/exploration", "/new-post", "/comment", "/my-profile", "/profile/**", "/subscribe", "/unsubscribe", "/subscriptions").hasAuthority("USER")
                                 .and()
                                 .csrf().disable()
                                 .headers().frameOptions().disable()
